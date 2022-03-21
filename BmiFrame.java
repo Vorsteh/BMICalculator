@@ -1,9 +1,9 @@
 import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 
 
-public class BmiFrame {
+public class BmiFrame implements KeyListener{
 
     double underWeight = 18.5f;
     double normalWeight = 24.9f;
@@ -59,25 +59,26 @@ public class BmiFrame {
                 heightText.setText("");
             }
         });
+
+
     }
     public void setLabel(){
-        weight.setBounds(40, 50, 100, 25);
-        height.setBounds(40, 125, 100, 25);
+        weight.setBounds(40, 125, 100, 25);
+        height.setBounds(40, 50, 100, 25);
         BMI.setBounds(175, 180, 50, 25);
         weight.setVisible(true);
         height.setVisible(true);
         BMI.setVisible(true);
+
+        weight.setBackground(Color.white);
+        height.setBackground(Color.white);
+
     }
     public void setTextField(){
-        weightText.setBounds(90, 50, 100, 25);
-        heightText.setBounds(90, 125, 100, 25);
-        weightText.setFocusable(false);
-        weightText.setFocusable(true);
-        heightText.setFocusable(false);
-        heightText.setFocusable(true);
-
-
-
+        weightText.setBounds(90, 125, 100, 25);
+        heightText.setBounds(90, 50, 100, 25);
+        heightText.addKeyListener(this);
+        weightText.addKeyListener(this);
     }
     public void setButton(){
         calc.setBounds(55, 180, 100, 35);
@@ -95,6 +96,7 @@ public class BmiFrame {
 
 
         frame.setSize(windowWidth, windowHeight);
+        frame.getContentPane().setBackground(Color.lightGray);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
@@ -119,7 +121,31 @@ public class BmiFrame {
         }
     }
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args)  {
         new BmiFrame(300, 300);
+    }
+
+
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_ENTER){
+            System.out.println("Pressed");
+            double bmi = calculateBMI(Double.parseDouble(heightText.getText()), Double.parseDouble(weightText.getText()));
+            String bmiNew = String.format("%.1f", bmi);
+            BMI.setText(String.valueOf(bmiNew));
+            JOptionPane.showMessageDialog(frame, scale(bmi, underWeight, normalWeight, overweight));
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }
